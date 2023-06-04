@@ -58,6 +58,8 @@ module RuboCop
 
         @enabled_cache = {}.compare_by_identity
         @disabled_cache = {}.compare_by_identity
+
+        @cops_set = Set.new
       end
 
       def enlist(cop)
@@ -95,7 +97,8 @@ module RuboCop
       end
 
       def contains_cop_matching?(names)
-        cops.any? { |cop| cop.match?(names) }
+        clear_enrollment_queue
+        names.any? { |name| @cops_set.include?(name) }
       end
 
       # Convert a user provided cop name into a properly namespaced name
@@ -288,6 +291,8 @@ module RuboCop
           @departments[cop.department] ||= []
           @departments[cop.department] << cop
           @cops_by_cop_name[cop.cop_name] << cop
+          @cops_set << cop.cop_name
+          @cops_set << cop.badge.department_name
         end
         @enrollment_queue = []
       end
