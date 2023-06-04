@@ -291,8 +291,7 @@ module RuboCop
           @departments[cop.department] ||= []
           @departments[cop.department] << cop
           @cops_by_cop_name[cop.cop_name] << cop
-          @cops_set << cop.cop_name
-          @cops_set << cop.badge.department_name
+          cop.matching_names.each { |name| @cops_set << name }
         end
         @enrollment_queue = []
       end

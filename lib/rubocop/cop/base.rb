@@ -107,7 +107,11 @@ module RuboCop
       def self.match?(given_names)
         return false unless given_names
 
-        given_names.include?(cop_name) || given_names.include?(badge.department_name)
+        !(matching_names & given_names).empty?
+      end
+
+      def self.matching_names
+        [cop_name, badge.department_name]
       end
 
       # Override and return the Force class(es) you need to join
